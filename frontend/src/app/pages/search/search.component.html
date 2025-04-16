@@ -1,0 +1,99 @@
+<!-- Contenedor general con fondo dinámico -->
+<div [ngClass]="'fondo-' + climaActual || 'fondo-default'" class="min-h-screen">
+
+
+  <div class="max-w-3xl mx-auto p-6 space-y-10">
+    <!-- Input + botón + sugerencias -->
+    <div class="relative mb-6">
+      <div class="flex gap-2">
+        <input
+          type="text"
+          [(ngModel)]="city"
+          (input)="onCityInputChange()"
+          (keyup.enter)="citySuggestions.length === 1 ? selectSuggestion(citySuggestions[0]) : null"
+          placeholder="Introduce una ciudad"
+          class="flex-1 px-4 py-2 rounded border shadow"
+        />
+        <button
+          (click)="selectSuggestion(citySuggestions[0])"
+          [disabled]="citySuggestions.length !== 1"
+          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Buscar
+        </button>
+      </div>
+
+      <!-- Lista de sugerencias -->
+      <ul *ngIf="citySuggestions.length" class="absolute left-0 right-0 bg-white border shadow-md mt-1 rounded z-10 max-h-60 overflow-auto">
+        <li
+          *ngFor="let suggestion of citySuggestions"
+          (click)="selectSuggestion(suggestion)"
+          class="px-4 py-2 cursor-pointer hover:bg-blue-100 transition"
+        >
+          {{ suggestion.name }},
+          {{ suggestion.state ? suggestion.state + ', ' : '' }}
+          {{ suggestion.country }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Día actual destacado -->
+    <div *ngIf="hoy" class="bg-blue-600 text-white p-6 rounded-xl shadow-lg text-center animate-fade-in">
+      <h1 class="text-4xl font-bold mb-2">{{ weather.displayName }}</h1>
+      <h3 class="text-1xl font-bold mb-2">{{ weather.sys.country }}</h3>
+      <h2 class="text-2xl font-bold mb-1">Hoy - {{ hoy.fecha }}</h2>
+      <img
+        [src]="'https://openweathermap.org/img/wn/' + hoy.icon + '@2x.png'"
+        [attr.alt]="'Clima: ' + hoy.desc"
+        [attr.title]="'Clima: ' + hoy.desc"
+        class="w-24 h-24 mx-auto"
+      />
+      <p class="text-lg capitalize mt-2">{{ hoy.desc }}</p>
+      <p class="text-xl mt-2 font-semibold">{{ hoy.temp }} °C</p>
+    </div>
+
+    <!-- Sección: Pronóstico por horas -->
+    <section *ngIf="horas.length" class="bg-white/90 p-4 rounded-xl shadow-md animate-fade-in">
+      <h3 class="text-xl font-bold text-center mb-4 text-blue-700">Próximas 24 horas</h3>
+      <div class="overflow-x-auto">
+        <div class="flex gap-4 w-max">
+          <div
+            *ngFor="let hora of horas"
+            class="min-w-[120px] bg-white text-center p-4 rounded-lg shadow hover:scale-105 transition-all animate-slide-up"
+          >
+            <p class="text-sm font-semibold">{{ hora.dt_txt | date:'HH:mm' }}</p>
+            <img
+              [src]="'https://openweathermap.org/img/wn/' + hora.weather[0].icon + '@2x.png'"
+              class="w-12 h-12 mx-auto"
+              [attr.alt]="'Clima: ' + hora.weather[0].description"
+            />
+            <p class="text-xs capitalize mt-1">{{ hora.weather[0].description }}</p>
+            <p class="font-bold mt-1">{{ hora.main.temp }} °C</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Pronóstico próximos días -->
+    <section *ngIf="diasPosteriores.length" class="bg-white/90 p-4 rounded-xl shadow-md animate-fade-in">
+      <h3 class="text-xl font-bold text-center mb-4 text-blue-700">Próximos días</h3>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div
+          *ngFor="let dia of diasPosteriores"
+          class="bg-white text-center p-4 rounded-lg shadow hover:scale-105 transition-all animate-slide-up"
+        >
+          <p class="font-semibold text-sm">{{ dia.fecha }}</p>
+          <img
+            [src]="'https://openweathermap.org/img/wn/' + dia.icon + '@2x.png'"
+            [attr.alt]="'Clima: ' + dia.desc"
+            [attr.title]="'Clima: ' + dia.desc"
+            class="w-16 h-16 mx-auto"
+          />
+          <p class="text-sm capitalize mt-1">{{ dia.desc }}</p>
+          <p class="text-md font-semibold">{{ dia.temp }} °C</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</div>

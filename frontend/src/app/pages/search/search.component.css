@@ -1,0 +1,33 @@
+.fondo-clear {
+  background-image: url('/assets/backgrounds/clear.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.fondo-clouds {
+  background-image: url('/assets/backgrounds/clouds.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.fondo-rain {
+  background-image: url('/assets/backgrounds/rain.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.fondo-snow {
+  background-image: url('/assets/backgrounds/snow.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.fondo-thunderstorm {
+  background-image: url('/assets/backgrounds/thunderstorm.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.fondo-default {
+  background: linear-gradient(to bottom, #e0f2ff, #ffffff);
+}
